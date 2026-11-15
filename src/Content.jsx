@@ -160,7 +160,7 @@ const Page = ({ children, onBack, hv }) => (
 function TugasButton({ hv }) {
   return (
     <a 
-      href="/tugas.html" 
+      href="tugas.html" 
       target="_blank" 
       rel="noopener noreferrer"
       {...hv}
@@ -505,36 +505,7 @@ export default function Content({ go, onEnter, onLeave, velocityRef }) {
         {list.length > 6 && <div className="mt-8 text-center"><button {...hv} onClick={() => setAll(!all)} className="px-7 py-3.5 border border-[#252830] text-[#e2e4e9] text-xs uppercase tracking-widest hover:border-[#8e95a5] transition-colors font-mono">{all ? 'Show Less' : 'View All Projects'}</button></div>}
       </Sec>
 
-      <Sec id="academic" no="03" title="Academic Journey" jp="学業の軌跡" mark="学">
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-px bg-[#252830] border border-[#252830] mb-8">
-          {SEMESTERS.map((s, i) => (
-            <button key={i} {...hv} onClick={() => setSem(i)} className={`py-4 text-center transition-colors ${sem === i ? 'bg-[#e2e4e9] text-[#121316]' : 'bg-[#15171d] text-[#8e95a5] hover:bg-[#181a20]'}`}>
-              <span className="block text-[9px] font-mono uppercase tracking-widest">Sem</span>
-              <span className="block font-serif text-2xl">{i + 1}</span>
-            </button>))}
-        </div>
-        <div key={sem} className="slide-in border border-[#252830] bg-[#15171d] p-6 md:p-10">
-          <div className="flex flex-wrap justify-between gap-4 mb-8">
-            <div>
-              <h3 className="text-2xl md:text-4xl font-serif text-[#e2e4e9]">Semester {sem + 1}</h3>
-              <p className="text-xs font-mono text-[#8e95a5] uppercase mt-2">{S.y} — {S.c.length} mata kuliah</p>
-              <p className="text-sm text-[#8e95a5] font-light mt-3 max-w-xl">{S.sum}</p>
-            </div>
-            <span className={`self-start text-[10px] font-mono uppercase tracking-widest border border-[#252830] px-3 py-1.5 ${stColor[S.st]}`}>{S.st}</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-[#252830] border border-[#252830]">
-            {S.c.map((c, ci) => (
-              <Rv key={c} d={ci * 70} className="bg-[#121316]"><button {...hv} onClick={() => to({ t: 'c', si: sem, ci }, { k: '講義', t: c })} className="group w-full h-full block p-5 text-left hover:bg-[#181a20] transition-colors">
-                <span className="text-[10px] font-mono text-[#8e95a5]">{String(ci + 1).padStart(2, '0')}</span>
-                <span className="block font-serif text-lg text-[#e2e4e9] mt-1 group-hover:translate-x-1 transition-transform">{c}</span>
-                <span className="block text-[10px] font-mono uppercase tracking-widest text-[#8e95a5]/70 mt-3">Lihat 16 pertemuan{cn(sem, ci) ? ` · ${cn(sem, ci)} tugas` : ''} →</span>
-              </button></Rv>))}
-          </div>
-          <div className="mt-6 border border-dashed border-[#8e95a5]/40 px-5 py-4 text-xs font-mono text-[#8e95a5]"><span className="text-[#e2e4e9]">Project semester ini:</span> {S.p}</div>
-        </div>
-      </Sec>
-
-      <Sec id="skills" no="04" title="Technical Expertise" jp="技術スタック" mark="技">
+      <Sec id="skills" no="03" title="Technical Expertise" jp="技術スタック" mark="技">
         <div ref={skRef} className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {SKILLS.map((g, gi) => (
             <Rv key={g.g} d={gi * 120} className="h-full"><div className="h-full border border-[#252830] p-8 bg-[#15171d] hover:border-[#8e95a5]/40 transition-colors">
@@ -551,7 +522,7 @@ export default function Content({ go, onEnter, onLeave, velocityRef }) {
         </div>
       </Sec>
 
-      <Sec id="career" no="05" title="Career Roadmap" jp="進路" mark="進">
+      <Sec id="career" no="04" title="Career Roadmap" jp="進路" mark="進">
         <div data-prog className="relative max-w-3xl border-l border-[#252830] ml-2"><span data-line aria-hidden className="absolute -left-px top-0 w-px h-full bg-[#e2e4e9] origin-top" style={{ transform: 'scaleY(0)' }} />
           {CAREER.map(([w, t, d], i) => (
             <Rv key={t} className="relative pl-10 pb-12 last:pb-0">

@@ -4,10 +4,10 @@ import { ArrowUpRight, ChevronRight, Menu, X, Send, CheckCircle2 } from 'lucide-
 import Transition from './Transition.jsx';
 import Content, { watch } from './Content.jsx';
 
-const NAV = ['About', 'Projects', 'Academic', 'Skills', 'Career', 'Contact'];
+const NAV = ['About', 'Projects', 'Skills', 'Career', 'Contact'];
 const LABELS = {
   hero: { k: '家', t: 'Home' }, about: { k: '概要', t: '01 — About' }, projects: { k: '制作実績', t: '02 — Projects' },
-  academic: { k: '学業', t: '03 — Academic' }, skills: { k: '技術', t: '04 — Skills' }, career: { k: '進路', t: '05 — Career' }, contact: { k: '連絡', t: '06 — Contact' },
+  skills: { k: '技術', t: '03 — Skills' }, career: { k: '進路', t: '04 — Career' }, contact: { k: '連絡', t: '05 — Contact' },
 };
 
 export default function App() {
