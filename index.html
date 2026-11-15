@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fairuz Triharyadi - Pro Player ML, PUBG, FF, Roblox</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Serif+JP:wght@300;400;600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+              serif: ['"Noto Serif JP"', '"Cinzel"', 'serif'],
+              mono: ['monospace'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      .writing-vertical {
+        writing-mode: vertical-rl;
+        text-orientation: mixed;
+      }
+      ::-webkit-scrollbar {
+        width: 5px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #121316;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #252830;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8e95a5;
+      }
+      @keyframes slidein { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: none; } }
+      .slide-in { animation: slidein .6s cubic-bezier(.2,.8,.2,1); }
+      :root { --e: cubic-bezier(.16, 1, .3, 1); }
+      .rv { opacity: 0; transform: translateY(44px); clip-path: inset(100% -60px -60px -60px); filter: blur(5px);
+            transition: opacity 1s var(--e), transform 1.2s var(--e), clip-path 1.2s var(--e), filter 1s var(--e); transition-delay: var(--d, 0ms); }
+      .rv.in { opacity: 1; transform: none; clip-path: inset(-60px); filter: blur(0); }
+      .draw { transform: scaleX(0); transform-origin: left; transition: transform 1.4s var(--e); }
+      .draw.in { transform: scaleX(1); }
+      @media (prefers-reduced-motion: reduce) {
+        .rv, .draw { opacity: 1 !important; transform: none !important; clip-path: none !important; filter: none !important; }
+        * { transition-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body class="bg-[#121316] text-[#e2e4e9] antialiased selection:bg-[#e2e4e9] selection:text-[#121316] overflow-x-hidden">
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

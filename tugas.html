@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tugasku – Pengumpulan Tugas Mahasiswa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="tugas.css">
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Dialog Pertemuan -->
+  <dialog id="dP">
+    <div class="dh">
+      <h2 id="pH"></h2>
+      <p id="pP"></p>
+    </div>
+    <div class="db">
+      <div id="pCur" class="cur"></div>
+      <div id="pNone" class="cur" hidden>Belum ada tugas yang dikumpulkan untuk pertemuan ini.</div>
+      <div id="pEdit">
+        <div class="f">
+          <label id="pL">Berkas tugas</label>
+          <div id="drop" class="drop" tabindex="0" role="button">
+            <b>Pilih berkas</b> atau seret ke sini<br>
+            <small>Bisa lebih dari 1 file | PDF, DOCX, PPTX, XLSX, ZIP, JPG, PNG, TXT | Max 10 MB per file</small>
+          </div>
+          <input id="sF" type="file" multiple hidden accept=".pdf,.docx,.pptx,.xlsx,.zip,.jpg,.jpeg,.png,.txt">
+          <div id="fInfo"></div>
+        </div>
+        <div class="f">
+          <label for="sK">Catatan untuk dosen (opsional)</label>
+          <textarea id="sK" rows="2"></textarea>
+        </div>
+      </div>
+      <div class="err" id="sE" role="alert"></div>
+    </div>
+    <div class="df" style="flex-wrap:wrap">
+      <button class="btn r" id="pDel" style="margin-right:auto">Hapus semua</button>
+      <button class="btn g" data-close>Tutup</button>
+      <button class="btn" id="pSave">Simpan</button>
+    </div>
+  </dialog>
+
+  <!-- Dialog Tambah Mata Kuliah -->
+  <dialog id="dM">
+    <div class="dh">
+      <h2>Tambah mata kuliah</h2>
+      <p>Langsung tersedia 16 pertemuan.</p>
+    </div>
+    <div class="db">
+      <div class="f">
+        <label for="mN">Nama mata kuliah</label>
+        <input id="mN" placeholder="Contoh: Struktur Data">
+      </div>
+      <div class="f">
+        <label for="mS">Semester</label>
+        <select id="mS"></select>
+      </div>
+      <div class="err" id="mE" role="alert"></div>
+    </div>
+    <div class="df">
+      <button class="btn g" data-close>Batal</button>
+      <button class="btn" id="mGo">Tambah</button>
+    </div>
+  </dialog>
+
+  <!-- Dialog Konfirmasi Hapus -->
+  <dialog id="dC">
+    <div class="dh">
+      <h2>Hapus?</h2>
+      <p id="cP"></p>
+    </div>
+    <div class="df" style="padding-top:20px">
+      <button class="btn g" data-close>Batal</button>
+      <button class="btn r" id="cGo">Ya, hapus</button>
+    </div>
+  </dialog>
+
+  <!-- Toast Notification -->
+  <div id="toast" role="status"></div>
+
+  <script src="tugas.js"></script>
+</body>
+</html>
