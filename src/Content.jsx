@@ -160,7 +160,7 @@ const Page = ({ children, onBack, hv }) => (
 function TugasButton({ hv }) {
   return (
     <a 
-      href="tugas.html" 
+      href="https://tugasanalisis.vercel.app/" 
       target="_blank" 
       rel="noopener noreferrer"
       {...hv}
