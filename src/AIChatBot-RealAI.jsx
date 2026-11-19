@@ -42,10 +42,24 @@ INSTRUKSI:
 2. Gunakan bahasa Indonesia casual tapi sopan
 3. Boleh pakai emoji untuk friendly vibes
 4. Kalau ditanya di luar scope biodata, bilang "Untuk hal itu lebih baik tanya langsung ke Fairuz ya!"
-5. Jawab singkat tapi jelas (2-4 kalimat)
-6. Jangan bilang kamu AI buatan OpenAI/Claude, cukup bilang "AI assistant Fairuz"
+5. Jawab singkat tapi jelas (2-4 kalimat, max 5 bullet points)
+6. Jangan bilang kamu AI buatan OpenAI/Claude, cukup bilang "AIpay"
 
-Sekarang jawab pertanyaan user!`;
+FORMAT JAWABAN:
+- Gunakan **bold** untuk highlight (contoh: **React**, **GPT-4**)
+- Gunakan bullet points (•) untuk list skills/projects
+- Pisahkan paragraf dengan line break untuk readability
+- Contoh format bagus:
+
+Fairuz punya beberapa skill utama:
+• **React & JavaScript** - untuk frontend development
+• **Python** - untuk backend & data processing
+• **UI/UX Design** - bikin interface yang user-friendly
+** baca lagi biodata ku
+
+Dia juga aktif bikin project seperti **PayFlow** dan **Portfolio Website**.
+
+Sekarang jawab pertanyaan user dengan format yang rapi!`;
 
 // ===== OPENROUTER API - REAL AI =====
 const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY; // Support both dev & production
@@ -103,6 +117,55 @@ async function chatWithRealAI(messages) {
       message: `Error: ${error.message}. Cek console untuk detail.`
     };
   }
+}
+
+// ===== MESSAGE FORMATTER - Support Bold, Lists, Line Breaks =====
+function MessageContent({ content }) {
+  // Split by double line breaks untuk paragraphs
+  const paragraphs = content.split('\n\n');
+  
+  return (
+    <div className="space-y-2">
+      {paragraphs.map((para, idx) => {
+        // Check if it's a bullet list
+        const isBulletList = para.trim().match(/^[•\-\*]\s/m);
+        const isNumberList = para.trim().match(/^\d+\.\s/m);
+        
+        if (isBulletList || isNumberList) {
+          const items = para.split('\n').filter(line => line.trim());
+          return (
+            <ul key={idx} className="space-y-1 pl-4">
+              {items.map((item, i) => {
+                const cleanItem = item.replace(/^[•\-\*\d+\.]\s*/, ''); // Remove bullet/number
+                return (
+                  <li key={i} className="flex gap-2">
+                    <span className="text-[#8e95a5] mt-0.5">•</span>
+                    <span>{formatInline(cleanItem)}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          );
+        }
+        
+        // Regular paragraph
+        return <p key={idx} className="leading-relaxed">{formatInline(para)}</p>;
+      })}
+    </div>
+  );
+}
+
+// Format inline text (bold, etc)
+function formatInline(text) {
+  // Handle **bold** text
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={i} className="font-semibold text-white">{part.slice(2, -2)}</strong>;
+    }
+    return part;
+  });
 }
 
 // ===== CHAT COMPONENT =====
@@ -211,13 +274,13 @@ export default function AIChatBot({ onEnter, onLeave }) {
                 className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div
-                  className={`max-w-[80%] px-4 py-3 rounded-lg text-sm whitespace-pre-line ${
+                  className={`max-w-[80%] px-4 py-3 rounded-lg text-sm ${
                     msg.role === 'user'
                       ? 'bg-[#4338ca] text-white'
                       : 'bg-[#181a20] text-[#e2e4e9] border border-[#252830]'
                   }`}
                 >
-                  {msg.content}
+                  <MessageContent content={msg.content} />
                 </div>
               </div>
             ))}
