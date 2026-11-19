@@ -132,71 +132,85 @@ async function chatWithRealAI(messages) {
 
 // ===== MESSAGE FORMATTER - Support Bold, Lists, Line Breaks =====
 function MessageContent({ content }) {
-  // Split by line breaks first
-  const lines = content.split('\n').filter(line => line.trim());
+  // STRATEGY: Split by numbered patterns (1., 2., 3.) or bullet patterns (• - *)
+  // This forces proper list rendering even if AI doesn't use newlines
   
   const result = [];
-  let currentList = [];
-  let listType = null; // 'bullet' or 'number'
+  let text = content;
   
-  lines.forEach((line, idx) => {
-    const trimmed = line.trim();
+  // Detect if text contains numbered list pattern: "1. **Text** 2. **Text**"
+  const hasNumberedList = /\d+\.\s+\*\*[^*]+\*\*/.test(text);
+  
+  if (hasNumberedList) {
+    // Split by number patterns: "1. ", "2. ", "3. ", etc
+    const parts = text.split(/(?=\d+\.\s+)/);
     
-    // Check if it's a bullet point (•, -, *)
-    const isBullet = /^[•\-\*]\s+/.test(trimmed);
+    const listItems = [];
+    let intro = '';
     
-    // Check if it's a numbered list (1., 2., 3.)
-    const isNumber = /^\d+\.\s+/.test(trimmed);
-    
-    if (isBullet || isNumber) {
-      // Add to current list
-      if (listType === null) {
-        listType = isBullet ? 'bullet' : 'number';
+    parts.forEach((part, idx) => {
+      const trimmed = part.trim();
+      if (!trimmed) return;
+      
+      // Check if starts with number
+      const match = trimmed.match(/^(\d+)\.\s+(.+)/);
+      if (match) {
+        const itemText = match[2];
+        listItems.push(itemText);
+      } else {
+        // It's intro text before list
+        intro = trimmed;
       }
+    });
+    
+    // Render intro + list
+    if (intro) {
+      result.push(
+        <p key="intro" className="leading-relaxed mb-2">
+          {formatInline(intro)}
+        </p>
+      );
+    }
+    
+    if (listItems.length > 0) {
+      result.push(
+        <ul key="list" className="space-y-2 my-2">
+          {listItems.map((item, i) => (
+            <li key={i} className="flex gap-2 items-start">
+              <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
+              <span className="flex-1">{formatInline(item)}</span>
+            </li>
+          ))}
+        </ul>
+      );
+    }
+    
+  } else {
+    // No numbered list detected - split by \n normally
+    const lines = text.split('\n').filter(line => line.trim());
+    
+    lines.forEach((line, idx) => {
+      const trimmed = line.trim();
       
-      const cleanItem = trimmed.replace(/^[•\-\*\d+\.]\s*/, '');
-      currentList.push(cleanItem);
+      // Check for bullet points
+      const isBullet = /^[•\-\*]\s+/.test(trimmed);
       
-    } else {
-      // Not a list item - flush current list if any
-      if (currentList.length > 0) {
+      if (isBullet) {
+        const cleanItem = trimmed.replace(/^[•\-\*]\s*/, '');
         result.push(
-          <ul key={`list-${result.length}`} className="space-y-1.5 my-2">
-            {currentList.map((item, i) => (
-              <li key={i} className="flex gap-2 items-start">
-                <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
-                <span className="flex-1">{formatInline(item)}</span>
-              </li>
-            ))}
-          </ul>
+          <div key={idx} className="flex gap-2 items-start my-1">
+            <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
+            <span className="flex-1">{formatInline(cleanItem)}</span>
+          </div>
         );
-        currentList = [];
-        listType = null;
-      }
-      
-      // Add as paragraph
-      if (trimmed) {
+      } else {
         result.push(
-          <p key={`p-${result.length}`} className="leading-relaxed my-1">
+          <p key={idx} className="leading-relaxed my-1">
             {formatInline(trimmed)}
           </p>
         );
       }
-    }
-  });
-  
-  // Flush remaining list
-  if (currentList.length > 0) {
-    result.push(
-      <ul key={`list-${result.length}`} className="space-y-1.5 my-2">
-        {currentList.map((item, i) => (
-          <li key={i} className="flex gap-2 items-start">
-            <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
-            <span className="flex-1">{formatInline(item)}</span>
-          </li>
-        ))}
-      </ul>
-    );
+    });
   }
   
   return <div className="space-y-1">{result}</div>;
