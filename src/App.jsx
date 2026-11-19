@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { ArrowUpRight, ChevronRight, Menu, X, Send, CheckCircle2 } from 'lucide-react';
 import Transition from './Transition.jsx';
 import Content, { watch } from './Content.jsx';
+import AIChatBot from './AIChatBot.jsx';
 
 const NAV = ['About', 'Projects', 'Skills', 'Career', 'Contact'];
 const LABELS = {
@@ -511,6 +512,7 @@ export default function App() {
       </section>
 
       <Transition ref={tr} />
+      <AIChatBot onEnter={onEnterHover} onLeave={onLeaveHover} />
 
     </div>
   );
