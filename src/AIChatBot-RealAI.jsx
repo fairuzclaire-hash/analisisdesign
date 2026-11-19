@@ -5,11 +5,11 @@ import { MessageCircle, X, Send } from 'lucide-react';
 const BIO = {
   name: 'Muhammad Fairuz Triharyadi',
   nim: '240511102',
-  university: 'Universitas Muhammadiyah Cirebon',
+  university: 'Universitas Muhammadiyah Cirebon (UMC)',
   major: 'Teknik Informatika',
   semester: 5,
   skills: ['React', 'JavaScript', 'Python', 'UI/UX Design', 'Database', 'Three.js'],
-  interests: ['Web Development', 'Machine Learning', 'Design Systems'],
+  interests: ['Web Development', 'Machine Learning', 'Design Systems', '3D Animation', 'Video Editing'],
   contact: {
     email: 'fairuztriharyadi@gmail.com',
     linkedin: 'https://www.linkedin.com/in/muhammad-fairuz-triharyadi-93a541369',
@@ -17,11 +17,11 @@ const BIO = {
     tiktok: 'https://www.tiktok.com/@payaruz',
   },
   projects: [
-    { name: 'PayFlow', desc: 'Sistem pengumpulan tugas dengan MongoDB, comment system, dan smart profanity filter' },
-    { name: 'Portfolio Website', desc: 'Portfolio interaktif dengan 3D shader effects menggunakan Three.js' },
-    { name: 'Map Roblox', desc: 'Membuat Map Roblox hanya seorang saja walaupun sempet sakit :'},
-    { name: 'AI Cuaca', desc: 'Fairuz juga pernah membuat AI Cuaca!'},
-    { name: 'Software Editing Mobile', desc: 'Kedepannya juga fairuz sedang membuat software editing untuk mobile loh, software akan hadir untuk membuat MotionGraphic, 3D, dll karena fairuz mengikuti komunitas Visual Seven ia hobi sekali ngedit'},
+    { name: 'PayFlow', desc: 'Sistem pengumpulan tugas dengan MongoDB, fitur comment & smart profanity filter' },
+    { name: 'Portfolio Website', desc: 'Portfolio interaktif dengan 3D shader effects pakai Three.js' },
+    { name: 'Map Roblox', desc: 'Bikin Map Roblox sendirian walaupun sempat sakit' },
+    { name: 'AI Cuaca', desc: 'Aplikasi AI untuk prediksi cuaca' },
+    { name: 'Software Editing Mobile', desc: 'Sedang develop software editing mobile untuk MotionGraphic & 3D (komunitas Visual Seven)' },
   ],
 };
 
@@ -45,21 +45,32 @@ INSTRUKSI:
 5. Jawab singkat tapi jelas (2-4 kalimat, max 5 bullet points)
 6. Jangan bilang kamu AI buatan OpenAI/Claude, cukup bilang "AIpay"
 
-FORMAT JAWABAN:
-- Gunakan **bold** untuk highlight (contoh: **React**, **GPT-4**)
-- Gunakan bullet points (•) untuk list skills/projects
-- Pisahkan paragraf dengan line break untuk readability
-- Contoh format bagus:
+FORMAT JAWABAN YANG WAJIB DIPAKAI:
+PENTING: Gunakan line break (\n) untuk memisahkan setiap item list!
 
-Fairuz punya beberapa skill utama:
-• **React & JavaScript** - untuk frontend development
-• **Python** - untuk backend & data processing
-• **UI/UX Design** - bikin interface yang user-friendly
-** baca lagi biodata ku
+Contoh BENAR untuk list projects:
+Fairuz punya beberapa project keren:
+• **PayFlow** - sistem pengumpulan tugas
+• **Portfolio Website** - portfolio dengan 3D effects
+• **Map Roblox** - bikin map sendirian
+• **AI Cuaca** - aplikasi prediksi cuaca
+• **Software Editing Mobile** - lagi develop (komunitas Visual Seven)
 
-Dia juga aktif bikin project seperti **PayFlow** dan **Portfolio Website**.
+Contoh BENAR untuk paragraf:
+Fairuz kuliah di **UMC** jurusan **Teknik Informatika** semester 5.
 
-Sekarang jawab pertanyaan user dengan format yang rapi!`;
+Dia punya skill utama di **React, JavaScript, Python**, dan **UI/UX Design**. 
+
+Sekarang tertarik banget sama **Web Development, 3D Animation**, sama **Video Editing**.
+
+ATURAN FORMATTING:
+- Setiap item list HARUS di baris baru (pakai \n)
+- Gunakan • untuk bullet points
+- Gunakan **bold** untuk nama project/skill penting
+- Pisahkan paragraf dengan double line break (\n\n)
+- JANGAN gabung semua list dalam 1 baris panjang!
+
+Sekarang jawab pertanyaan user dengan format yang RAPI!`;
 
 // ===== OPENROUTER API - REAL AI =====
 const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY; // Support both dev & production
@@ -121,38 +132,74 @@ async function chatWithRealAI(messages) {
 
 // ===== MESSAGE FORMATTER - Support Bold, Lists, Line Breaks =====
 function MessageContent({ content }) {
-  // Split by double line breaks untuk paragraphs
-  const paragraphs = content.split('\n\n');
+  // Split by line breaks first
+  const lines = content.split('\n').filter(line => line.trim());
   
-  return (
-    <div className="space-y-2">
-      {paragraphs.map((para, idx) => {
-        // Check if it's a bullet list
-        const isBulletList = para.trim().match(/^[•\-\*]\s/m);
-        const isNumberList = para.trim().match(/^\d+\.\s/m);
-        
-        if (isBulletList || isNumberList) {
-          const items = para.split('\n').filter(line => line.trim());
-          return (
-            <ul key={idx} className="space-y-1 pl-4">
-              {items.map((item, i) => {
-                const cleanItem = item.replace(/^[•\-\*\d+\.]\s*/, ''); // Remove bullet/number
-                return (
-                  <li key={i} className="flex gap-2">
-                    <span className="text-[#8e95a5] mt-0.5">•</span>
-                    <span>{formatInline(cleanItem)}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          );
-        }
-        
-        // Regular paragraph
-        return <p key={idx} className="leading-relaxed">{formatInline(para)}</p>;
-      })}
-    </div>
-  );
+  const result = [];
+  let currentList = [];
+  let listType = null; // 'bullet' or 'number'
+  
+  lines.forEach((line, idx) => {
+    const trimmed = line.trim();
+    
+    // Check if it's a bullet point (•, -, *)
+    const isBullet = /^[•\-\*]\s+/.test(trimmed);
+    
+    // Check if it's a numbered list (1., 2., 3.)
+    const isNumber = /^\d+\.\s+/.test(trimmed);
+    
+    if (isBullet || isNumber) {
+      // Add to current list
+      if (listType === null) {
+        listType = isBullet ? 'bullet' : 'number';
+      }
+      
+      const cleanItem = trimmed.replace(/^[•\-\*\d+\.]\s*/, '');
+      currentList.push(cleanItem);
+      
+    } else {
+      // Not a list item - flush current list if any
+      if (currentList.length > 0) {
+        result.push(
+          <ul key={`list-${result.length}`} className="space-y-1.5 my-2">
+            {currentList.map((item, i) => (
+              <li key={i} className="flex gap-2 items-start">
+                <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
+                <span className="flex-1">{formatInline(item)}</span>
+              </li>
+            ))}
+          </ul>
+        );
+        currentList = [];
+        listType = null;
+      }
+      
+      // Add as paragraph
+      if (trimmed) {
+        result.push(
+          <p key={`p-${result.length}`} className="leading-relaxed my-1">
+            {formatInline(trimmed)}
+          </p>
+        );
+      }
+    }
+  });
+  
+  // Flush remaining list
+  if (currentList.length > 0) {
+    result.push(
+      <ul key={`list-${result.length}`} className="space-y-1.5 my-2">
+        {currentList.map((item, i) => (
+          <li key={i} className="flex gap-2 items-start">
+            <span className="text-[#8e95a5] mt-0.5 flex-shrink-0">•</span>
+            <span className="flex-1">{formatInline(item)}</span>
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  
+  return <div className="space-y-1">{result}</div>;
 }
 
 // Format inline text (bold, etc)
