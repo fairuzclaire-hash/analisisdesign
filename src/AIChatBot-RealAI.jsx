@@ -73,18 +73,10 @@ ATURAN FORMATTING:
 Sekarang jawab pertanyaan user dengan format yang RAPI!`;
 
 // ===== OPENROUTER API - REAL AI =====
-// Support both VITE_ (local .env) and non-VITE_ (Vercel production)
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY;
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY; // Support both dev & production
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 async function chatWithRealAI(messages) {
-  // DEBUG: Log API key status
-  console.log('🔑 API Key check:', {
-    vite: import.meta.env.VITE_OPENROUTER_API_KEY ? 'ADA' : 'KOSONG',
-    regular: import.meta.env.OPENROUTER_API_KEY ? 'ADA' : 'KOSONG',
-    final: API_KEY ? API_KEY.substring(0, 15) + '...' : 'UNDEFINED'
-  });
-  
   // Cek API key
   if (!API_KEY || API_KEY.includes('xxx')) {
     return {
@@ -104,10 +96,6 @@ async function chatWithRealAI(messages) {
       },
       body: JSON.stringify({
         model: 'openai/gpt-4o-mini', // GPT-4o Mini - murah, cepat, pintar!
-        // Alternatif model lain yang GRATIS & BAGUS:
-        // model: 'meta-llama/llama-3.1-8b-instruct:free', // Llama 3.1 - 100% GRATIS unlimited!
-        // model: 'google/gemini-flash-1.5', // Gemini Flash - cepat & murah
-        // model: 'anthropic/claude-3-haiku', // Claude 3 Haiku - pintar & cepat
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           ...messages
