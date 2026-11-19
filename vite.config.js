@@ -6,5 +6,9 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true
+  },
+  define: {
+    // Expose OPENROUTER_API_KEY to client (without VITE_ prefix)
+    'import.meta.env.OPENROUTER_API_KEY': JSON.stringify(process.env.OPENROUTER_API_KEY || process.env.VITE_OPENROUTER_API_KEY)
   }
 });

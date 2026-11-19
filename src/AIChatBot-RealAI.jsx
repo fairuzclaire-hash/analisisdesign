@@ -73,7 +73,8 @@ ATURAN FORMATTING:
 Sekarang jawab pertanyaan user dengan format yang RAPI!`;
 
 // ===== OPENROUTER API - REAL AI =====
-const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY; // Support both dev & production
+// Support both VITE_ (local .env) and non-VITE_ (Vercel production)
+const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY;
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 async function chatWithRealAI(messages) {
