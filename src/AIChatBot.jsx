@@ -50,47 +50,82 @@ ATURAN:
 
 Sekarang, jawab pertanyaan visitor dengan natural!`;
 
-// ===== GROQ API (FREE & FAST) =====
-const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY; // Dari .env file
-const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+// ===== SIMPLE AI CHATBOT - NO API NEEDED =====
+// Chatbot sederhana dengan pattern matching
+// Bisa diupgrade ke real AI nanti
 
-async function chatWithAI(messages) {
-  // Validasi API key
-  if (!GROQ_API_KEY) {
-    console.error('GROQ API Key not found! Please set VITE_GROQ_API_KEY in .env file');
-    return 'API key belum dikonfigurasi. Hubungi admin untuk setup! 🔑';
-  }
-
-  try {
-    const response = await fetch(GROQ_API_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${GROQ_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Model Llama 3.3 70B - powerful & fast
-        messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
-          ...messages
-        ],
-        temperature: 0.7,
-        max_tokens: 500,
-        stream: false,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error?.message || 'API Error');
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-  } catch (error) {
-    console.error('Chat error:', error);
-    return 'Maaf, saya sedang error. Coba lagi nanti ya! 🙏';
-  }
+function chatWithAI(messages) {
+  return new Promise((resolve) => {
+    // Simulate thinking delay
+    setTimeout(() => {
+      const lastMessage = messages[messages.length - 1].content.toLowerCase();
+      
+      // Pattern matching - jawab berdasarkan keyword
+      let response = '';
+      
+      // Salam
+      if (lastMessage.match(/halo|hai|hi|hello|hey/i)) {
+        response = `Halo juga! 👋 Saya AI assistant Fairuz. Mau tanya apa nih tentang dia?`;
+      }
+      
+      // Skill
+      else if (lastMessage.match(/skill|kemampuan|bisa apa/i)) {
+        response = `Fairuz punya skill di:\n• React & JavaScript\n• Python\n• UI/UX Design\n• Database (MongoDB)\n• Three.js untuk 3D web\n\nDia suka banget bikin website interaktif!`;
+      }
+      
+      // Project
+      else if (lastMessage.match(/project|portfolio|karya|buat apa/i)) {
+        response = `Fairuz udah bikin beberapa project keren:\n\n1. **PayFlow** - Sistem pengumpulan tugas dengan MongoDB, fitur comment & profanity filter\n\n2. **Portfolio Website** - Website ini! Pakai React + Three.js buat animasi 3D\n\nSemua project bisa dilihat di section Projects di atas! 🚀`;
+      }
+      
+      // Kuliah/Pendidikan
+      else if (lastMessage.match(/kuliah|kampus|universitas|jurusan|semester/i)) {
+        response = `Fairuz kuliah di **Universitas Nusa Putra**, jurusan **Sistem Informasi** semester 4. NIM-nya 240511102. Lagi fokus belajar web development sama machine learning!`;
+      }
+      
+      // Tentang diri
+      else if (lastMessage.match(/siapa|tentang|cerita|diri/i)) {
+        response = `Fairuz itu mahasiswa Sistem Informasi yang passionate banget sama web development! Orangnya ramah, suka ngoding sambil dengerin musik, dan selalu excited belajar teknologi baru. Dia suka bikin website yang interactive dan user-friendly. 🎨💻`;
+      }
+      
+      // Kontak
+      else if (lastMessage.match(/kontak|hubungi|email|wa|whatsapp|sosmed|ig|instagram|linkedin/i)) {
+        response = `Mau kontak Fairuz? Ini kontaknya:\n\n📧 Email: fairuztriharyadi@gmail.com\n💼 LinkedIn: linkedin.com/in/muhammad-fairuz-triharyadi-93a541369\n📱 Instagram: @pailatte1\n🎵 TikTok: @payaruz\n\nLangsung aja DM atau email! Dia responsif kok 😊`;
+      }
+      
+      // Hobi/Interest
+      else if (lastMessage.match(/hobi|suka|interest|senang/i)) {
+        response = `Fairuz suka:\n• Web Development (terutama frontend)\n• Design UI/UX\n• Ngoding sambil dengerin musik\n• Eksplor teknologi baru\n• Bikin project side hustle\n\nPokoknya semua yang berhubungan sama creative coding! 🎨`;
+      }
+      
+      // Tech stack
+      else if (lastMessage.match(/tech|teknologi|pakai apa|tools/i)) {
+        response = `Tech stack yang Fairuz pakai:\n\n**Frontend:** React, JavaScript, Tailwind CSS, Three.js\n**Backend:** Node.js, MongoDB\n**Tools:** Git, Vite, Vercel\n**Design:** Figma\n\nLagi belajar juga: Python, Machine Learning, TypeScript`;
+      }
+      
+      // Lokasi
+      else if (lastMessage.match(/dimana|lokasi|tinggal|asal/i)) {
+        response = `Fairuz tinggal di Indonesia. Kuliah di Universitas Nusa Putra. Available untuk remote work atau magang! 🌏`;
+      }
+      
+      // Terima kasih
+      else if (lastMessage.match(/thanks|terima kasih|makasih|thank you/i)) {
+        response = `Sama-sama! Senang bisabantu. Ada yang mau ditanyain lagi? 😊`;
+      }
+      
+      // Default response
+      else {
+        const responses = [
+          `Hmm, saya cuma tau tentang Fairuz nih! Coba tanya tentang skill, project, atau cara kontaknya? 🤔`,
+          `Wah, pertanyaan menarik! Tapi saya fokus jawab seputar Fairuz aja ya. Mau tahu tentang project atau skill dia?`,
+          `Untuk hal itu, mungkin lebih baik tanya langsung ke Fairuz. Saya bisa jelasin tentang background, skill, atau project dia aja! 📧`,
+        ];
+        response = responses[Math.floor(Math.random() * responses.length)];
+      }
+      
+      resolve(response);
+    }, 800); // Simulate thinking time
+  });
 }
 
 // ===== CHAT COMPONENT =====
