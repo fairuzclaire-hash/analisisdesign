@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { ArrowUpRight, ChevronRight, Menu, X, Send, CheckCircle2 } from 'lucide-react';
 import Transition from './Transition.jsx';
 import Content, { watch } from './Content.jsx';
-import AIChatBot from './AIChatBot.jsx';
+import AIChatBot from './AIChatBot-RealAI.jsx'; // Real AI dengan ChatGPT
 
 const NAV = ['About', 'Projects', 'Skills', 'Career', 'Contact'];
 const LABELS = {
