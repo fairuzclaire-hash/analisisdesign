@@ -11,7 +11,7 @@ const BIO = {
   skills: ['React', 'JavaScript', 'Python', 'UI/UX Design', 'Database', 'Three.js'],
   interests: ['Web Development', 'Machine Learning', 'Design Systems', '3D Animation', 'Video Editing'],
   contact: {
-    email: 'fairuztriharyadi@gmail.com',
+    email: 'fairuzclaire@gmail.com',
     linkedin: 'https://www.linkedin.com/in/muhammad-fairuz-triharyadi-93a541369',
     instagram: 'https://www.instagram.com/pailatte1',
     tiktok: 'https://www.tiktok.com/@payaruz',
