@@ -78,6 +78,13 @@ const API_KEY = import.meta.env.VITE_OPENROUTER_API_KEY || import.meta.env.OPENR
 const API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
 async function chatWithRealAI(messages) {
+  // DEBUG: Log API key status
+  console.log('🔑 API Key check:', {
+    vite: import.meta.env.VITE_OPENROUTER_API_KEY ? 'ADA' : 'KOSONG',
+    regular: import.meta.env.OPENROUTER_API_KEY ? 'ADA' : 'KOSONG',
+    final: API_KEY ? API_KEY.substring(0, 15) + '...' : 'UNDEFINED'
+  });
+  
   // Cek API key
   if (!API_KEY || API_KEY.includes('xxx')) {
     return {
